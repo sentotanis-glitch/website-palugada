@@ -555,6 +555,46 @@
       { id:"kurasi", label:"Kurasi Modern", desc:"Edisi" },
     ];
 
+    // ===== SANITY CMS — ganti Project ID Anda di https://sanity.io/manage =====
+    const SANITY_PROJECT_ID = 'z4xqvrk2'; // contoh: 'abc12345'
+    const SANITY_DATASET = 'production';
+    const SANITY_API_VERSION = '2023-05-03';
+    async function loadFromSanity(){
+      if(!SANITY_PROJECT_ID || SANITY_PROJECT_ID.includes('REPLACE')) return false;
+      try{
+        const q1 = encodeURIComponent(`*[_type=="siteSettings"][0]{ownerName,monogram,waNumber,email,"heroImage":heroImage.asset->url}`);
+        const r1 = await fetch(`https://${SANITY_PROJECT_ID}.apicdn.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}?query=${q1}`);
+        const j1 = await r1.json();
+        if(j1.result){
+          const s=j1.result;
+          if(s.ownerName) { OWNER_NAME=s.ownerName; }
+          if(s.monogram) { /* will apply */ }
+          // update DOM later via applyCustomProfile will also handle
+          window.__SANITY_SETTINGS__=s;
+        }
+        const q2 = encodeURIComponent(`*[_type=="product"]|order(_createdAt asc){_id,name,subtitle,category,price,stock,badge,"image":coalesce(image.asset->url,imageUrl),description}`);
+        const r2 = await fetch(`https://${SANITY_PROJECT_ID}.apicdn.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}?query=${q2}`);
+        const j2 = await r2.json();
+        if(j2.result && j2.result.length){
+          PRODUCTS.length=0;
+          j2.result.forEach(doc=>{
+            PRODUCTS.push({
+              id: doc._id,
+              name: doc.name,
+              subtitle: doc.subtitle||doc.description||'',
+              category: doc.category,
+              price: doc.price,
+              stock: doc.stock||10,
+              badge: doc.badge||'',
+              image: doc.image || PRODUCTS[0]?.image
+            });
+          });
+          return true;
+        }
+      }catch(e){ console.warn('Sanity fetch failed',e); }
+      return false;
+    }
+
     const fmt = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
     // --- ADMIN: load custom data from localStorage (Super Admin) ---
     try{
@@ -895,8 +935,21 @@
       if(e.key==='Escape'){ closeModal(); closeCart(); closeCheckout(); }
     });
 
-    // init
-    renderCats(); renderProducts(); updateCartUI();
+    // init — coba Sanity dulu, fallback ke lokal + localStorage admin
+    (async()=>{
+      const ok = await loadFromSanity();
+      if(ok){
+        const s=window.__SANITY_SETTINGS__;
+        if(s){
+          if(s.ownerName){ document.getElementById('header-name').textContent=s.ownerName.toUpperCase(); document.getElementById('hero-name').textContent=s.ownerName; document.querySelectorAll('.owner-name').forEach(el=>el.textContent=s.ownerName); }
+          if(s.monogram){ document.getElementById('monogram').textContent=s.monogram; document.querySelectorAll('.monogram-text').forEach(el=>el.textContent=s.monogram); }
+          if(s.heroImage) document.getElementById('hero-photo').src=s.heroImage;
+          if(s.waNumber){ const wa=s.waNumber; document.querySelectorAll('a[href*="wa.me"]').forEach(a=> a.href=a.href.replace(/wa\.me\/\d+/,`wa.me/${wa}`)); }
+        }
+        // render ulang setelah data Sanity masuk
+      }
+      renderCats(); renderProducts(); updateCartUI();
+    })();
     // smooth active nav on scroll
     const sections = ["beranda","tentang","kurasi","butik","jurnal","atelier"].map(id=> document.getElementById(id));
     const navLinks = document.querySelectorAll('.nav-link');
