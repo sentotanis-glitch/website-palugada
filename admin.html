@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Admin — Maison SA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>html{scroll-behavior:smooth}</style>
+</head>
+<body class="bg-[#FDF8F0] text-[#0B0F1A] antialiased">
+<div id="login" class="min-h-screen flex items-center justify-center p-4 bg-[#0B0F1A]">
+  <div class="w-full max-w-md bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+    <div class="text-center">
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0B0F1A] font-[Cinzel] text-[#C9A86A] font-bold">SA</span>
+      <h1 class="mt-4 font-[Cinzel] text-[18px] tracking-[0.2em] text-[#0B0F1A]">SUPER ADMIN</h1>
+      <p class="mt-1 font-[Plus_Jakarta_Sans] text-[12px] tracking-[0.14em] text-[#1A1A1E]/50">MAISON SA — PALUGADA</p>
+    </div>
+    <div class="mt-8 space-y-4">
+      <div>
+        <label class="mb-2 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">PASSWORD</label>
+        <input id="pw" type="password" placeholder="Masukkan password" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px] focus:border-[#C9A86A] focus:outline-none">
+        <p class="mt-2 font-[Plus_Jakarta_Sans] text-[11px] text-[#1A1A1E]/40">Super Admin: <span class="font-mono font-bold">palugada2024</span> (edit semua) • Admin: <span class="font-mono font-bold">admin123</span> (edit produk saja)</p>
+      </div>
+      <button id="loginBtn" class="w-full bg-[#0B0F1A] py-3 font-[Cinzel] text-[13px] tracking-[0.16em] text-[#C9A86A] hover:bg-[#121A2E]">MASUK →</button>
+      <p id="loginErr" class="hidden text-center font-[Plus_Jakarta_Sans] text-[12px] text-red-600">Password salah</p>
+      <a href="index.html" class="block text-center font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/40 hover:text-[#0B0F1A]">← KEMBALI KE WEBSITE</a>
+    </div>
+  </div>
+</div>
+
+<div id="dash" class="hidden">
+  <header class="sticky top-0 z-40 border-b border-[#1A1A1E]/10 bg-white">
+    <div class="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-3 sm:px-6">
+      <div class="flex items-center gap-3">
+        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#0B0F1A] font-[Cinzel] text-[#C9A86A] font-bold text-[13px]">SA</span>
+        <div>
+          <p class="font-[Cinzel] text-[12px] tracking-[0.18em] text-[#0B0F1A]">SUPER ADMIN</p>
+          <p id="roleBadge" class="font-[Plus_Jakarta_Sans] text-[10px] tracking-[0.14em] text-[#8C704A]">SUPER ADMIN • AKSES PENUH</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" target="_blank" class="hidden rounded-full border border-[#1A1A1E]/10 bg-white px-4 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.12em] text-[#0B0F1A] sm:block">LIHAT WEBSITE →</a>
+        <button id="logout" class="rounded-full bg-[#0B0F1A] px-4 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.12em] text-[#C9A86A]">KELUAR</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-[1280px] px-4 py-6 sm:px-6">
+    <div class="flex gap-2 border-b border-[#1A1A1E]/10 pb-3">
+      <button data-tab="profil" class="tab-btn rounded-full bg-[#0B0F1A] px-5 py-2 font-[Plus_Jakarta_Sans] text-[11px] font-semibold tracking-[0.14em] text-[#C9A86A]">PROFIL</button>
+      <button data-tab="produk" class="tab-btn rounded-full border border-[#1A1A1E]/10 bg-white px-5 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#0B0F1A]">PRODUK PALUGADA</button>
+      <button data-tab="pesanan" class="tab-btn rounded-full border border-[#1A1A1E]/10 bg-white px-5 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#0B0F1A]">PESANAN</button>
+    </div>
+
+    <!-- PROFIL -->
+    <div id="tab-profil" class="tab-pane mt-6">
+      <div class="grid gap-6 lg:grid-cols-2">
+        <div class="border border-[#1A1A1E]/10 bg-white p-6">
+          <h2 class="font-[Cinzel] text-[13px] tracking-[0.18em] text-[#0B0F1A]">IDENTITAS MAISON</h2>
+          <p id="profilLockMsg" class="hidden mt-2 rounded bg-amber-50 p-3 font-[Plus_Jakarta_Sans] text-[11px] text-amber-800">Akun Admin hanya bisa edit Produk. Login sebagai Super Admin untuk edit profil.</p>
+          <div class="mt-4 grid gap-4">
+            <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">NAMA LENGKAP</span><input id="f_name" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+            <div class="grid grid-cols-2 gap-4">
+              <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">MONOGRAM (2 HURUF)</span><input id="f_mono" maxlength="2" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px] uppercase"></label>
+              <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">WA NUMBER (628...)</span><input id="f_wa" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+            </div>
+            <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">EMAIL</span><input id="f_email" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+            <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">FOTO HERO (URL)</span><input id="f_photo" placeholder="https://..." class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[11px]"></label>
+            <div class="flex gap-3">
+              <img id="f_preview" src="" alt="preview" class="h-24 w-20 object-cover border border-[#1A1A1E]/10">
+              <p class="font-[Plus_Jakarta_Sans] text-[11px] leading-relaxed text-[#1A1A1E]/50">Ganti URL foto hero. Bisa pakai link Unsplash atau upload ke <a href="https://postimages.org" target="_blank" class="text-[#8C704A] underline">postimages.org</a> lalu copy Direct Link.</p>
+            </div>
+            <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">GANTI PASSWORD SUPER ADMIN</span><input id="f_newpw" placeholder="Kosongkan jika tidak ganti" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+            <label class="block"><span class="mb-1.5 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">GANTI PASSWORD ADMIN</span><input id="f_newpw2" placeholder="Kosongkan jika tidak ganti" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-4 py-3 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="border border-[#C9A86A]/30 bg-[#0B0F1A] p-6 text-white">
+            <p class="font-[Cinzel] text-[12px] tracking-[0.18em] text-[#C9A86A]">PREVIEW</p>
+            <p class="mt-2 font-[Plus_Jakarta_Sans] text-[13px] leading-relaxed text-white/70">Perubahan profil langsung terlihat di website setelah klik Simpan. Untuk permanen di GitHub, klik Export & Upload.</p>
+            <div class="mt-4 flex gap-2">
+              <button id="saveProfil" class="flex-1 bg-[#C9A86A] py-3 font-[Plus_Jakarta_Sans] text-[12px] font-bold tracking-[0.14em] text-[#0B0F1A]">SIMPAN PROFIL</button>
+              <button id="exportBtn" class="flex-1 border border-[#C9A86A]/50 py-3 font-[Plus_Jakarta_Sans] text-[12px] tracking-[0.14em] text-[#C9A86A]">EXPORT</button>
+            </div>
+          </div>
+          <div class="border border-[#1A1A1E]/10 bg-white p-6">
+            <p class="font-[Cinzel] text-[12px] tracking-[0.18em] text-[#0B0F1A]">CARA JADI PERMANEN DI GITHUB</p>
+            <ol class="mt-3 list-decimal space-y-2 pl-5 font-[Plus_Jakarta_Sans] text-[12px] leading-relaxed text-[#1A1A1E]/60">
+              <li>Klik <b>Export</b> → download `index.html` baru</li>
+              <li>Buka <a href="https://github.com/sentotanis-glitch/website-palugada/upload/main" target="_blank" class="text-[#8C704A] underline">Upload ke GitHub</a> → drag `index.html` baru → Commit</li>
+              <li>Atau klik `Simpan` saja untuk preview lokal (hanya di HP/laptop ini, pakai localStorage)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUK -->
+    <div id="tab-produk" class="tab-pane mt-6 hidden">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <p class="font-[Plus_Jakarta_Sans] text-[12px] tracking-[0.14em] text-[#1A1A1E]/50"><span id="prodCount">0</span> PRODUK • KLIK EDIT UNTUK UBAH • TAMBAH BARU DI BAWAH</p>
+        <button id="addProd" class="rounded-full bg-[#0B0F1A] px-5 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#C9A86A]">+ TAMBAH PRODUK</button>
+      </div>
+      <div id="prodList" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+      <div class="mt-6 flex gap-3">
+        <button id="saveProduk" class="flex-1 bg-[#0B0F1A] py-3 font-[Cinzel] text-[12px] tracking-[0.16em] text-[#C9A86A]">SIMPAN PRODUK</button>
+        <button id="exportProd" class="flex-1 border border-[#C9A86A]/40 bg-white py-3 font-[Plus_Jakarta_Sans] text-[12px] tracking-[0.14em] text-[#0B0F1A]">EXPORT HTML</button>
+      </div>
+    </div>
+
+    <!-- PESANAN -->
+    <div id="tab-pesanan" class="tab-pane mt-6 hidden">
+      <div class="border border-[#1A1A1E]/10 bg-white p-6">
+        <h2 class="font-[Cinzel] text-[13px] tracking-[0.18em] text-[#0B0F1A]">PESANAN MASUK (LOCALSTORAGE)</h2>
+        <p class="mt-2 font-[Plus_Jakarta_Sans] text-[12px] text-[#1A1A1E]/50">Pesanan dari form concierge & checkout disimpan di browser pengunjung. Di sini kamu lihat yang di browser kamu saja. Untuk rekap permanen, hubungkan WA Business.</p>
+        <div id="orderList" class="mt-4 space-y-3"></div>
+        <button id="clearOrders" class="mt-4 border border-[#1A1A1E]/10 px-4 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/50">HAPUS SEMUA PESANAN (LOKAL)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Editor Modal -->
+<div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+  <button id="editBackdrop" class="absolute inset-0 bg-[#0B0F1A]/70 backdrop-blur-sm"></button>
+  <div class="relative w-full max-w-lg bg-white p-6 max-h-[90vh] overflow-y-auto">
+    <h3 id="editTitle" class="font-[Cinzel] text-[14px] tracking-[0.16em] text-[#0B0F1A]">EDIT PRODUK</h3>
+    <div class="mt-4 grid gap-3">
+      <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">NAMA</span><input id="e_name" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+      <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">SUBTITLE</span><input id="e_sub" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">KATEGORI</span><select id="e_cat" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"><option value="wastra">Wastra & Mode</option><option value="kriya">Kriya & Pusaka</option><option value="aroma">Aroma & Ritual</option><option value="rasa">Rasa & Jamuan</option><option value="atelier">Atelier & Jasa</option><option value="kurasi">Kurasi Modern</option></select></label>
+        <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">HARGA (IDR)</span><input id="e_price" type="number" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">HARGA ASLI (opsional, untuk coret)</span><input id="e_orig" type="number" placeholder="Kosongkan jika tidak diskon" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+        <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">STOK</span><input id="e_stock" type="number" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+      </div>
+      <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">BADGE (Bespoke, Langka, dll)</span><input id="e_badge" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+      <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">NOTE (Pre-order ...)</span><input id="e_note" class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[13px]"></label>
+      <label class="block"><span class="mb-1 block font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#1A1A1E]/60">URL GAMBAR</span><input id="e_img" placeholder="https://..." class="w-full border border-[#1A1A1E]/15 bg-[#FDF8F0] px-3 py-2 font-[Plus_Jakarta_Sans] text-[11px]"></label>
+      <div class="flex gap-2 pt-2">
+        <button id="saveEdit" class="flex-1 bg-[#0B0F1A] py-3 font-[Plus_Jakarta_Sans] text-[12px] tracking-[0.14em] text-[#C9A86A]">SIMPAN</button>
+        <button id="cancelEdit" class="flex-1 border border-[#1A1A1E]/15 bg-white py-3 font-[Plus_Jakarta_Sans] text-[12px] tracking-[0.14em] text-[#0B0F1A]">BATAL</button>
+      </div>
+      <button id="deleteProd" class="w-full border border-red-200 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-red-600">HAPUS PRODUK INI</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_SUPER = "palugada2024";
+const DEFAULT_ADMIN = "admin123";
+let role = null; // 'super' | 'admin'
+let products = [];
+let editingIdx = -1;
+
+function getStore(){
+  try{ return JSON.parse(localStorage.getItem('maison_custom')||'null'); }catch(e){ return null; }
+}
+function getProducts(){
+  const s=getStore();
+  if(s && s.products) return s.products;
+  // fallback to embedded PRODUCTS from index.html via fetch
+  return null;
+}
+
+async function loadDefaults(){
+  // try fetch index.html to parse PRODUCTS
+  try{
+    const txt = await fetch('index.html').then(r=>r.text());
+    const m = txt.match(/const PRODUCTS = (\[[\s\S]*?\]);/);
+    if(m){ products = eval('('+m[1]+')'); }
+  }catch(e){}
+  const s=getStore();
+  if(s){
+    if(s.products) products=s.products;
+    document.getElementById('f_name').value=s.owner||"Sentot Anis";
+    document.getElementById('f_mono').value=s.mono||"SA";
+    document.getElementById('f_wa').value=s.wa||"6281234567890";
+    document.getElementById('f_email').value=s.email||"halo@maisonsa.id";
+    document.getElementById('f_photo').value=s.photo||"";
+  } else {
+    document.getElementById('f_name').value="Sentot Anis";
+    document.getElementById('f_mono').value="SA";
+    document.getElementById('f_wa').value="6281234567890";
+    document.getElementById('f_email').value="halo@maisonsa.id";
+    document.getElementById('f_photo').value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=60";
+  }
+  updatePreview();
+  renderProds();
+}
+
+function updatePreview(){
+  const url=document.getElementById('f_photo').value;
+  if(url) document.getElementById('f_preview').src=url;
+}
+
+function saveStore(){
+  const s={
+    owner: document.getElementById('f_name').value.trim()||"Sentot Anis",
+    mono: document.getElementById('f_mono').value.trim().toUpperCase().slice(0,2)||"SA",
+    wa: document.getElementById('f_wa').value.trim()||"6281234567890",
+    email: document.getElementById('f_email').value.trim()||"halo@maisonsa.id",
+    photo: document.getElementById('f_photo').value.trim(),
+    products: products,
+    pwSuper: localStorage.getItem('maison_pw_super')||DEFAULT_SUPER,
+    pwAdmin: localStorage.getItem('maison_pw_admin')||DEFAULT_ADMIN,
+  };
+  const npw=document.getElementById('f_newpw').value.trim();
+  const npw2=document.getElementById('f_newpw2').value.trim();
+  if(npw){ localStorage.setItem('maison_pw_super', npw); s.pwSuper=npw; }
+  if(npw2){ localStorage.setItem('maison_pw_admin', npw2); s.pwAdmin=npw2; }
+  localStorage.setItem('maison_custom', JSON.stringify(s));
+  return s;
+}
+
+function renderProds(){
+  document.getElementById('prodCount').textContent=products.length;
+  const el=document.getElementById('prodList');
+  el.innerHTML=products.map((p,i)=>`
+    <div class="border border-[#1A1A1E]/10 bg-white p-3 flex gap-3">
+      <img src="${p.image}" class="h-20 w-20 object-cover border border-[#1A1A1E]/10">
+      <div class="flex-1 min-w-0">
+        <p class="font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#8C704A]">${p.category.toUpperCase()}</p>
+        <p class="font-[Plus_Jakarta_Sans] text-[13px] font-semibold text-[#0B0F1A] truncate">${p.name}</p>
+        <p class="font-[Plus_Jakarta_Sans] text-[11px] text-[#1A1A1E]/50">${p.subtitle}</p>
+        <p class="mt-1 font-[Cinzel] text-[12px] text-[#0B0F1A]">Rp ${Number(p.price).toLocaleString('id-ID')}</p>
+      </div>
+      <button data-edit="${i}" class="self-start rounded-full bg-[#0B0F1A] px-3 py-1 font-[Plus_Jakarta_Sans] text-[10px] tracking-[0.14em] text-[#C9A86A]">EDIT</button>
+    </div>
+  `).join('');
+  el.querySelectorAll('[data-edit]').forEach(b=> b.addEventListener('click', ()=> openEdit(Number(b.dataset.edit))));
+}
+
+function openEdit(idx){
+  editingIdx=idx;
+  const p=idx>=0?products[idx]:{name:"",subtitle:"",category:"wastra",price:100000,image:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=60",badge:"",note:"",stock:10,original:""};
+  document.getElementById('editTitle').textContent=idx>=0?"EDIT PRODUK":"TAMBAH PRODUK";
+  document.getElementById('e_name').value=p.name;
+  document.getElementById('e_sub').value=p.subtitle;
+  document.getElementById('e_cat').value=p.category;
+  document.getElementById('e_price').value=p.price;
+  document.getElementById('e_orig').value=p.original||"";
+  document.getElementById('e_stock').value=p.stock;
+  document.getElementById('e_badge').value=p.badge||"";
+  document.getElementById('e_note').value=p.note||"";
+  document.getElementById('e_img').value=p.image;
+  document.getElementById('deleteProd').style.display=idx>=0?"block":"none";
+  document.getElementById('editModal').classList.remove('hidden');
+  document.getElementById('editModal').classList.add('flex');
+}
+
+function closeEdit(){
+  document.getElementById('editModal').classList.add('hidden');
+  document.getElementById('editModal').classList.remove('flex');
+  editingIdx=-1;
+}
+
+function exportHtml(){
+  const s=saveStore();
+  // fetch original index.html and replace config
+  fetch('index.html').then(r=>r.text()).then(txt=>{
+    let out=txt;
+    out=out.replace(/const OWNER_NAME = ".*?";/, `const OWNER_NAME = "${s.owner.replace(/"/g,'\\"')}";`);
+    out=out.replace(/const MONOGRAM = ".*?";/, `const MONOGRAM = "${s.mono}";`);
+    out=out.replace(/const WA_NUMBER = ".*?";/, `const WA_NUMBER = "${s.wa}";`);
+    out=out.replace(/const EMAIL = ".*?";/, `const EMAIL = "${s.email.replace(/"/g,'\\"')}";`);
+    if(s.photo) out=out.replace(/id="hero-photo" src=".*?"/, `id="hero-photo" src="${s.photo}"`);
+    // replace PRODUCTS
+    const prodStr = "const PRODUCTS = "+JSON.stringify(products.map(p=>{
+      const o={id:p.id,name:p.name,subtitle:p.subtitle,category:p.category,price:Number(p.price),image:p.image,stock:Number(p.stock)};
+      if(p.badge) o.badge=p.badge;
+      if(p.note) o.note=p.note;
+      if(p.original) o.original=Number(p.original);
+      return o;
+    }), null, 2).replace(/"([^"]+)":/g,'$1:').replace(/"/g,'"');
+    // Actually keep valid JS: use JSON then fix
+    let prodJS = "const PRODUCTS = "+JSON.stringify(products, null, 6)+";";
+    out=out.replace(/const PRODUCTS = \[[\s\S]*?\];/, prodJS);
+    const blob=new Blob([out],{type:"text/html"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download="index.html"; a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+// login
+document.getElementById('loginBtn').addEventListener('click', ()=>{
+  const pw=document.getElementById('pw').value;
+  const superPw=localStorage.getItem('maison_pw_super')||DEFAULT_SUPER;
+  const adminPw=localStorage.getItem('maison_pw_admin')||DEFAULT_ADMIN;
+  if(pw===superPw){ role='super'; }
+  else if(pw===adminPw){ role='admin'; }
+  else { document.getElementById('loginErr').classList.remove('hidden'); return; }
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('dash').classList.remove('hidden');
+  document.getElementById('roleBadge').textContent=role==='super'?'SUPER ADMIN • AKSES PENUH':'ADMIN • HANYA PRODUK';
+  if(role==='admin'){
+    document.getElementById('profilLockMsg').classList.remove('hidden');
+    document.querySelectorAll('#tab-profil input').forEach(i=> i.disabled=true);
+    document.getElementById('f_newpw').disabled=true;
+    document.getElementById('f_newpw2').disabled=true;
+    document.getElementById('saveProfil').disabled=true;
+    document.getElementById('saveProfil').classList.add('opacity-40');
+  }
+  loadDefaults();
+});
+document.getElementById('pw').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('loginBtn').click(); });
+document.getElementById('logout').addEventListener('click', ()=> location.reload());
+document.getElementById('f_photo').addEventListener('input', updatePreview);
+
+// tabs
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=> x.className="tab-btn rounded-full border border-[#1A1A1E]/10 bg-white px-5 py-2 font-[Plus_Jakarta_Sans] text-[11px] tracking-[0.14em] text-[#0B0F1A]");
+    b.className="tab-btn rounded-full bg-[#0B0F1A] px-5 py-2 font-[Plus_Jakarta_Sans] text-[11px] font-semibold tracking-[0.14em] text-[#C9A86A]";
+    document.querySelectorAll('.tab-pane').forEach(p=> p.classList.add('hidden'));
+    document.getElementById('tab-'+b.dataset.tab).classList.remove('hidden');
+    if(b.dataset.tab==='pesanan') renderOrders();
+  });
+});
+
+// save profil
+document.getElementById('saveProfil').addEventListener('click', ()=>{
+  if(role!=='super') return;
+  saveStore();
+  alert('Profil disimpan! Refresh website untuk lihat perubahan (atau Export untuk permanen ke GitHub).');
+});
+document.getElementById('exportBtn').addEventListener('click', exportHtml);
+document.getElementById('saveProduk').addEventListener('click', ()=>{
+  saveStore();
+  alert('Produk disimpan! (localStorage). Klik Export HTML untuk download file permanen.');
+});
+document.getElementById('exportProd').addEventListener('click', exportHtml);
+document.getElementById('addProd').addEventListener('click', ()=> openEdit(-1));
+document.getElementById('cancelEdit').addEventListener('click', closeEdit);
+document.getElementById('editBackdrop').addEventListener('click', closeEdit);
+document.getElementById('saveEdit').addEventListener('click', ()=>{
+  const p={
+    id: editingIdx>=0?products[editingIdx].id:"p"+Date.now().toString().slice(-6),
+    name: document.getElementById('e_name').value.trim()||"Produk Baru",
+    subtitle: document.getElementById('e_sub').value.trim()||"Deskripsi",
+    category: document.getElementById('e_cat').value,
+    price: Number(document.getElementById('e_price').value)||0,
+    image: document.getElementById('e_img').value.trim()||"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=60",
+    badge: document.getElementById('e_badge').value.trim()||undefined,
+    note: document.getElementById('e_note').value.trim()||undefined,
+    stock: Number(document.getElementById('e_stock').value)||0,
+    original: document.getElementById('e_orig').value?Number(document.getElementById('e_orig').value):undefined,
+  };
+  if(editingIdx>=0) products[editingIdx]=p; else products.push(p);
+  renderProds();
+  closeEdit();
+});
+document.getElementById('deleteProd').addEventListener('click', ()=>{
+  if(editingIdx>=0 && confirm('Hapus produk ini?')){ products.splice(editingIdx,1); renderProds(); closeEdit(); }
+});
+
+function renderOrders(){
+  const el=document.getElementById('orderList');
+  try{
+    const orders=JSON.parse(localStorage.getItem('maison_orders')||'[]');
+    if(orders.length===0){ el.innerHTML='<p class="font-[Plus_Jakarta_Sans] text-[12px] text-[#1A1A1E]/40">Belum ada pesanan di browser ini.</p>'; return; }
+    el.innerHTML=orders.map(o=>`<div class="border border-[#1A1A1E]/10 p-3"><p class="font-[Plus_Jakarta_Sans] text-[12px] font-semibold">${o.name} • ${o.wa}</p><p class="font-[Plus_Jakarta_Sans] text-[11px] text-[#1A1A1E]/60">${o.msg||''}</p><p class="font-[Plus_Jakarta_Sans] text-[10px] text-[#1A1A1E]/40">${o.date||''}</p></div>`).join('');
+  }catch(e){ el.innerHTML='<p class="font-[Plus_Jakarta_Sans] text-[12px] text-[#1A1A1E]/40">Error load</p>'; }
+}
+document.getElementById('clearOrders').addEventListener('click', ()=>{
+  if(confirm('Hapus semua pesanan lokal?')){ localStorage.removeItem('maison_orders'); renderOrders(); }
+});
+
+// Also hook checkout to save orders
+</script>
+</body>
+</html>
